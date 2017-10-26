@@ -47,9 +47,9 @@ class Command(BaseDbBackupCommand):
         self.filename = options.get('output_filename')
         self.path = options.get('output_path')
         try:
-            self.media_storage = get_storage_class()()
             for proj, path in settings.MEDIA_BACKUP_PATHS.items():
-                self.storage = get_storage(path)
+                self.media_storage = get_storage_class()(path)
+                self.storage = get_storage(options=settings.STORAGE_MEDIA_OPTIONS)
                 self.backup_mediafiles(proj)
                 if options.get('clean'):
                     self._cleanup_old_backups(servername=self.servername)

@@ -61,7 +61,6 @@ class Storage(object):
         """
         self._storage_path = storage_path or settings.STORAGE
         options = options.copy()
-        options.update(settings.STORAGE_OPTIONS)
         options = dict([(key.lower(), value) for key, value in options.items()])
         self.storageCls = get_storage_class(self._storage_path)
         self.storage = self.storageCls(**options)
