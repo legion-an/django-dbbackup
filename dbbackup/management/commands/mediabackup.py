@@ -10,7 +10,7 @@ from django.core.management.base import CommandError
 from django.core.files.storage import get_storage_class
 
 from ._base import BaseDbBackupCommand, make_option
-from ... import utils
+from ... import utils, settings
 from ...storage import get_storage, StorageError
 
 
@@ -48,10 +48,11 @@ class Command(BaseDbBackupCommand):
         self.path = options.get('output_path')
         try:
             self.media_storage = get_storage_class()()
-            self.storage = get_storage()
-            self.backup_mediafiles()
-            if options.get('clean'):
-                self._cleanup_old_backups(servername=self.servername)
+            for proj, path in settings.MEDIA_BACKUP_PATHS.items():
+                self.storage = get_storage(path)
+                self.backup_mediafiles(proj)
+                if options.get('clean'):
+                    self._cleanup_old_backups(servername=self.servername)
 
         except StorageError as err:
             raise CommandError(err)
@@ -81,14 +82,14 @@ class Command(BaseDbBackupCommand):
         tar_file.close()
         return fileobj
 
-    def backup_mediafiles(self):
+    def backup_mediafiles(self, proj):
         """
         Create backup file and write it to storage.
         """
         # Create file name
         extension = "tar%s" % ('.gz' if self.compress else '')
         filename = utils.filename_generate(extension,
-                                           servername=self.servername,
+                                           proj=proj,
                                            content_type=self.content_type)
         tarball = self._create_tar(filename)
         # Apply trans

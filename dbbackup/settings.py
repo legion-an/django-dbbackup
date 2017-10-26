@@ -22,10 +22,11 @@ CLEANUP_KEEP_MEDIA = getattr(settings, 'DBBACKUP_CLEANUP_KEEP_MEDIA', CLEANUP_KE
 CLEANUP_KEEP_FILTER = getattr(settings, 'DBBACKUP_CLEANUP_KEEP_FILTER', lambda x: False)
 
 MEDIA_PATH = getattr(settings, 'DBBACKUP_MEDIA_PATH', settings.MEDIA_ROOT)
+MEDIA_BACKUP_PATHS = getattr(settings, 'DBBACKUP_MEDIA_PATHS', {})
 
 DATE_FORMAT = getattr(settings, 'DBBACKUP_DATE_FORMAT', '%Y-%m-%d-%H%M%S')
 FILENAME_TEMPLATE = getattr(settings, 'DBBACKUP_FILENAME_TEMPLATE', '{databasename}-{servername}-{datetime}.{extension}')
-MEDIA_FILENAME_TEMPLATE = getattr(settings, 'DBBACKUP_MEDIA_FILENAME_TEMPLATE', '{servername}-{datetime}.{extension}')
+MEDIA_FILENAME_TEMPLATE = getattr(settings, 'DBBACKUP_MEDIA_FILENAME_TEMPLATE', '{proj}-{datetime}.{extension}')
 
 GPG_ALWAYS_TRUST = getattr(settings, 'DBBACKUP_GPG_ALWAYS_TRUST', False)
 GPG_RECIPIENT = GPG_ALWAYS_TRUST = getattr(settings, 'DBBACKUP_GPG_RECIPIENT', None)

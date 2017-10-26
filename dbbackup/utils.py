@@ -375,7 +375,7 @@ def filename_to_date(filename, datefmt=None):
         return datetime.strptime(datestring, datefmt)
 
 
-def filename_generate(extension, database_name='', servername=None, content_type='db', wildcard=None):
+def filename_generate(extension, database_name='', servername=None, content_type='db', wildcard=None, proj=''):
     """
     Create a new backup filename.
 
@@ -413,7 +413,8 @@ def filename_generate(extension, database_name='', servername=None, content_type
         'datetime': wildcard or datetime.now().strftime(settings.DATE_FORMAT),
         'databasename': database_name,
         'extension': extension,
-        'content_type': content_type
+        'content_type': content_type,
+        'proj': proj
     }
     if callable(template):
         filename = template(**params)
